@@ -26,14 +26,8 @@ h1 {
 }
 
 
-#game, canvas {
+canvas {
 	background: #fff url(bg.png);
 	margin: 0 auto;
   border-radius: 5px;
 }
-
-div#game {
-  width: 500px;
-  height: 300px;
-}
-
