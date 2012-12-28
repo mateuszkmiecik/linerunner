@@ -2,6 +2,9 @@ window.onload = function(){
 
 	var game = (function(){
 
+		// debug mode?
+		var DEBUG = DEBUG ? false : window.location.search.split('?')[1] == 'debug';
+
 		var self = {};
 
 		// base canvas elements
@@ -58,15 +61,24 @@ window.onload = function(){
 
 			// stickman
 			if(rolling){
-
-				ctx.translate(20+20,177+25/2);
+				
+				ctx.translate(20+20,175+25/2);
+				if(DEBUG){
+					ctx.fillStyle = 'rgba(0,255,0,0.5)';
+					ctx.fillRect(-25/2,-25/2,25,25);
+				}
 				ctx.rotate(Math.PI/6*active);
 				ctx.drawImage(sprites[7],-25/2,-25/2);
-				ctx.restore();
 
 			}else{
-				ctx.drawImage(sprites[active],20+startOffset,168);
+				if(DEBUG){
+					ctx.fillStyle = 'rgba(0,255,0,0.5)';
+					ctx.fillRect(20+startOffset,167,30,33);
+				}
+				ctx.drawImage(sprites[active],20+startOffset,167);
 			}
+
+			ctx.restore();
 
 			// next frame
 			update();
@@ -145,7 +157,6 @@ window.onload = function(){
 				}
 			}
 		}
-
 
 		////////////
 		return self;
