@@ -25,7 +25,9 @@ window.onload = function(){
 		var upPressing = false,
 			jumping = false;
 
-
+		// i wanna fly, as long as i caaaan       ♪ for Grzesiu ♪
+		var flyTimer = 4,
+			fly = flyTimer;
 
 		// start button and animation variables
 		var startButton,
@@ -121,7 +123,12 @@ window.onload = function(){
 						offsetY += 2;
 					}
 				}else if(offsetY >= 16){
-					stickmanState = 2;
+					if(fly > 0) fly--;
+					if(fly == 0){
+						stickmanState = 2;
+						fly = flyTimer;
+					}
+					
 				}
 
 			}else if(stickmanState == 2){ // down
@@ -134,7 +141,7 @@ window.onload = function(){
 					}
 				}else{
 					if(offsetY - 2 < 0){
-						
+
 						offsetY = 0;
 						if(!upPressing){
 							stickmanState = 0;
