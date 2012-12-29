@@ -26,7 +26,7 @@ window.onload = function(){
 			jumping = false;
 
 		// i wanna fly, as long as i caaaan       ♪ for Grzesiu ♪
-		var flyTimer = 4,
+		var flyTimer = 5,
 			fly = flyTimer;
 
 		// start button and animation variables
@@ -89,13 +89,16 @@ window.onload = function(){
 					ctx.fillRect(20+startOffset,167-offsetY*2,33,33);
 				}
 				
-				ctx.drawImage(sprites[active],20+startOffset,167-offsetY*2);
+				if(offsetY != 0){
+					ctx.drawImage(sprites[6],20+startOffset,167-offsetY*2);
+				}else{
+					ctx.drawImage(sprites[active],20+startOffset,167-offsetY*2);
+				}
+				
 					
 			}
 
-			// console.logs
-			console.log(offsetY);
-			
+			// console.logs			
 
 			// next frame
 			update();
@@ -110,19 +113,18 @@ window.onload = function(){
 
 
 			// jumping
-
-			// jumping ver.2 ---------------
 			if(stickmanState == 1){ // up
 
 				if(offsetY < 10){
 					offsetY += 2;
 				}else if(offsetY >= 10 && offsetY < 16){
 					if(upPressing){
-						offsetY += 1;
+						offsetY += 1.2;
 					}else{
 						offsetY += 2;
 					}
 				}else if(offsetY >= 16){
+
 					if(fly > 0) fly--;
 					if(fly == 0){
 						stickmanState = 2;
@@ -135,7 +137,7 @@ window.onload = function(){
 
 				if(offsetY > 10){
 					if(upPressing){
-						offsetY --;
+						offsetY -= 1.2;
 					}else{
 						offsetY -= 2;
 					}
@@ -153,41 +155,6 @@ window.onload = function(){
 				}
 
 			}
-			
-			// jumping ver.1 ---------------
-
-			/*if(stickmanState == 1){
-
-				if(offsetY < 16){
-					offsetY += 2;
-				}else{
-					stickmanState = 2;
-				}
-
-			}else if(stickmanState == 2){
-
-				if(offsetY - 2 > 0){
-					if(upPressing){
-						if(offsetY > 8){
-							offsetY -= 0.75;
-						}else{
-							offsetY -= 2;
-						}
-					}else{
-						offsetY -= 2;
-					}
-					
-				}else{
-					offsetY = 0;
-
-					if(!upPressing){
-						stickmanState = 0;
-					}
-				}
-
-			}*/
-
-
 
 			// startAnimation
 			if(startAnimation){
@@ -235,24 +202,16 @@ window.onload = function(){
 					case 38: // arrow up
 						if(playing){
 							event.preventDefault();
-
 							if(stickmanState == 0){
-
 								upPressing = true;
 								jumping = true;
 								stickmanState = 1;
-
 							}
-
-
-
-
 						}
 					break;
 					case 40: // arrow down
 						if(playing){
 							event.preventDefault();
-							//rolling = true;
 						}
 					break;
 				}
@@ -260,13 +219,14 @@ window.onload = function(){
 			keyup : function(event){
 				switch(event.keyCode){
 					case 38:
-
 						jumping = false;
 						upPressing = false;
 
+						if(stickmanState == 1){
+							fly = 3;
+						}
 					break;
 					case 40: // arrow down
-						//rolling = false;
 
 					break;
 				}
