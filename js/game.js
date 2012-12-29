@@ -108,7 +108,48 @@ window.onload = function(){
 
 
 			// jumping
-			if(stickmanState == 1){
+
+			// jumping ver.2 ---------------
+			if(stickmanState == 1){ // up
+
+				if(offsetY < 10){
+					offsetY += 2;
+				}else if(offsetY >= 10 && offsetY < 16){
+					if(upPressing){
+						offsetY += 1;
+					}else{
+						offsetY += 2;
+					}
+				}else if(offsetY >= 16){
+					stickmanState = 2;
+				}
+
+			}else if(stickmanState == 2){ // down
+
+				if(offsetY > 10){
+					if(upPressing){
+						offsetY --;
+					}else{
+						offsetY -= 2;
+					}
+				}else{
+					if(offsetY - 2 < 0){
+						
+						offsetY = 0;
+						if(!upPressing){
+							stickmanState = 0;
+						}
+
+					}else{
+						offsetY -= 2;
+					}
+				}
+
+			}
+			
+			// jumping ver.1 ---------------
+
+			/*if(stickmanState == 1){
 
 				if(offsetY < 16){
 					offsetY += 2;
@@ -137,7 +178,7 @@ window.onload = function(){
 					}
 				}
 
-			}
+			}*/
 
 
 
