@@ -11,18 +11,25 @@ window.onload = function(){
 		var canvas, ctx, W, H;
 
 		// main states of game
-		var playing = false,
+		var playing = true, // TODO: change to [false] after debugging
 			dead = false;
 
 		// stickman moving
 		var active = 1, // active sprite
-			jumping = false,
-			rolling = false; 
+			rolling = false,
+			stickmanState = 0, // 0 - ground, 1 - moving up, 2 - moving down
+			offsetY = 0 // distance from ground
+			; 
+
+		// keyboard jumping button boaleans
+		var upPressing = false,
+			jumping = false;
+
 
 
 		// start button and animation variables
 		var startButton,
-			startAnimation = false,
+			startAnimation = true, // TODO: change to [false] after debugging
 			startOffset = 215,
 			startAnimationMultiplier = 1;
 
@@ -43,7 +50,7 @@ window.onload = function(){
 			ctx = canvas.getContext("2d");
 			W = canvas.width; H = canvas.height;
 
-			// start button listener
+			// start button & keyboard listeners
 			startButton.addEventListener('click', events.startClick, false);
 			document.addEventListener('keydown', events.keydown, false);
 			document.addEventListener('keyup', events.keyup, false);
@@ -63,22 +70,30 @@ window.onload = function(){
 			if(rolling){
 				
 				ctx.translate(20+20,175+25/2);
+
 				if(DEBUG){
 					ctx.fillStyle = 'rgba(0,255,0,0.5)';
 					ctx.fillRect(-25/2,-25/2,25,25);
 				}
+
 				ctx.rotate(Math.PI/6*active);
 				ctx.drawImage(sprites[7],-25/2,-25/2);
+				ctx.restore();
 
 			}else{
+
 				if(DEBUG){
 					ctx.fillStyle = 'rgba(0,255,0,0.5)';
-					ctx.fillRect(20+startOffset,167,30,33);
+					ctx.fillRect(20+startOffset,167-offsetY*2,33,33);
 				}
-				ctx.drawImage(sprites[active],20+startOffset,167);
+				
+				ctx.drawImage(sprites[active],20+startOffset,167-offsetY*2);
+					
 			}
 
-			ctx.restore();
+			// console.logs
+			console.log(offsetY);
+			
 
 			// next frame
 			update();
@@ -90,6 +105,36 @@ window.onload = function(){
 			if(active>6){
 				active = active%6;
 			}
+
+
+			// jumping
+			if(stickmanState == 1){
+
+				if(offsetY < 16){
+					offsetY += 2;
+				}else{
+					stickmanState = 2;
+				}
+
+			}else if(stickmanState == 2){
+
+				if(offsetY - 2 > 0){
+					if(upPressing){
+						offsetY--;
+					}else{
+						offsetY -= 2;
+					}
+					
+				}else{
+					offsetY = 0;
+					
+					if(!upPressing){
+						stickmanState = 0;
+					}
+				}
+
+			}
+
 
 
 			// startAnimation
@@ -138,21 +183,39 @@ window.onload = function(){
 					case 38: // arrow up
 						if(playing){
 							event.preventDefault();
-							console.log('skaczemy!');
+
+							if(stickmanState == 0){
+
+								upPressing = true;
+								jumping = true;
+								stickmanState = 1;
+
+							}
+
+
+
+
 						}
 					break;
 					case 40: // arrow down
 						if(playing){
 							event.preventDefault();
-							rolling = true;
+							//rolling = true;
 						}
 					break;
 				}
 			},
 			keyup : function(event){
 				switch(event.keyCode){
-					case 40:
-						if(rolling) rolling = false;
+					case 38:
+
+						jumping = false;
+						upPressing = false;
+
+					break;
+					case 40: // arrow down
+						//rolling = false;
+
 					break;
 				}
 			}
