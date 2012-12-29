@@ -120,14 +120,18 @@ window.onload = function(){
 
 				if(offsetY - 2 > 0){
 					if(upPressing){
-						offsetY--;
+						if(offsetY > 8){
+							offsetY -= 0.75;
+						}else{
+							offsetY -= 2;
+						}
 					}else{
 						offsetY -= 2;
 					}
 					
 				}else{
 					offsetY = 0;
-					
+
 					if(!upPressing){
 						stickmanState = 0;
 					}
